@@ -6,12 +6,20 @@
 /*   By: ladir <ladir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 15:43:57 by ladir             #+#    #+#             */
-/*   Updated: 2026/01/20 17:57:16 by ladir            ###   ########.fr       */
+/*   Updated: 2026/01/22 16:50:02 by ladir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft/libft.h"
 #include <stdarg.h>
+
+enum e_flags {
+	left_adjust,
+	zero_pad,
+	alternate_form,
+	pre_blank,
+	sign
+};
 
 /*
 '-0.'	'-' => left adjusted
@@ -21,9 +29,26 @@
 		' ' => blank space before positive number
 		'+' => always add a sign. overrides ' '
 */
-static int	ft_pf_flags(char *fmt)
+static int	*ft_pf_flags(char **fmt)
 {
-	return (0);
+	int	*flags;
+
+	flags = calloc(5, sizeof(int));
+	while (ft_strchr("-0# +", **fmt))
+	{
+		if (**fmt == '-')
+			flags[left_adjust] = 1;
+		else if (**fmt == '0')
+			flags[zero_pad] = 1;
+		else if (**fmt == '#')
+			flags[alternate_form] = 1;
+		else if (**fmt == ' ')
+			flags[pre_blank] = 1;
+		else if (**fmt == '+')
+			flags[sign] = 1;
+		*fmt++;
+	}
+	return (flags);
 }
 
 /*
@@ -85,10 +110,16 @@ static int	ft_pf_precision(char **fmt)
 
 int	ft_selector(char **fmt, va_list args)
 {
-	int	len;
-	int	flags;
+	int		len;
+	int		*flags;
+	int		width;
+	int		precision;
+	char	*print_string;
 
 	len = 0;
-	flags = 0;
-	// order is flags ('-+0 #'), width, precision, specifier
+	flags = ft_pf_flags(fmt);
+	width = ft_pf_width(fmt);
+	precision = ft_pf_precision(fmt);
+	if (*fmt == 'c')
+		print_string = 
 }
