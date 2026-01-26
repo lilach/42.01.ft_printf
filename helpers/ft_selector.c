@@ -6,20 +6,11 @@
 /*   By: ladir <ladir@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/19 15:43:57 by ladir             #+#    #+#             */
-/*   Updated: 2026/01/22 16:50:02 by ladir            ###   ########.fr       */
+/*   Updated: 2026/01/26 16:03:26 by ladir            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft/libft.h"
-#include <stdarg.h>
-
-enum e_flags {
-	left_adjust,
-	zero_pad,
-	alternate_form,
-	pre_blank,
-	sign
-};
+#include "ft_pf_helpers.h"
 
 /*
 '-0.'	'-' => left adjusted
@@ -108,6 +99,7 @@ static int	ft_pf_precision(char **fmt)
 	return (precision);
 }
 
+/*cspdiuxX%*/
 int	ft_selector(char **fmt, va_list args)
 {
 	int		len;
@@ -121,5 +113,15 @@ int	ft_selector(char **fmt, va_list args)
 	width = ft_pf_width(fmt);
 	precision = ft_pf_precision(fmt);
 	if (*fmt == 'c')
-		print_string = 
+		print_string = ft_pf_char_to_str(
+				va_arg(args, unsigned int), flags, width);
+	if (*fmt == 's')
+		print_string = ft_pf_strdup(
+				va_arg(args, char *), precision, flags, width);
+	if (*fmt == 'd' || *fmt == 'i')
+		print_string;
+	len = ft_strlen(print_string);
+	write(1, print_string, len);
+	free(print_string);
+	return (len);
 }
